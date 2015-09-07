@@ -8,6 +8,7 @@ Misc ad-hoc helper scripts for `pfSense <https://www.pfsense.org/>`_ boxes.
   :backlinks: none
 
 
+
 Installation
 ------------
 
@@ -36,6 +37,7 @@ copying script contents, usually at the very top.
 Any scripts installed that way will be stored in the pfSense config, and can be
 backed-up/restored along with all the other pfSense configuration parameters
 (e.g. through "Diagnostics - Backup/restore" in WebUI).
+
 
 
 Scripts
@@ -90,3 +92,41 @@ gateways marked as "defaultgw" and dumping list of these to a file in /tmp
 (configurable in script via PFx_STATE_FILE), checking old contents of it against
 this list and running ``/etc/rc.kill_states <iface>`` for interfaces that are
 not longer used for default gw.
+
+
+
+Debugging
+---------
+
+Some (or all) scripts check if PFx_DEBUG env variable is non-empty and echo some
+extra debug information to stderr when that's the case.
+
+Best way to see this output would be to run the scripts manually from the shell,
+or with output redirection, i.e.::
+
+  % PFx_DEBUG=t /usr/local/etc/gateway_change_conn_reset.sh 5
+  gw_ifaces :: em1
+  gw_ifaces_old :: em1
+  gw_ifaces :: em1
+  gw_ifaces_old :: em1
+  gw_ifaces :: em0
+  gw_ifaces_old :: em1
+  rc.kill_states :: em1
+  gw_ifaces :: em0
+  gw_ifaces_old :: em0
+  ...
+
+For conventional output redirection via e.g. ``2>/tmp/debug.log``, make sure
+"sh" shell is being used, as tcsh has its own syntax for that::
+
+  % ps -p$$
+    PID TT  STAT    TIME COMMAND
+  43600  0  S    0:00.01 /bin/tcsh
+
+  % sh
+  % ps -p$$
+    PID TT  STAT    TIME COMMAND
+  97458  0  S    0:00.00 sh
+
+  % PFx_DEBUG=t nohup /usr/local/etc/gateway_change_conn_reset.sh 5 2>/tmp/debug.log &
+  % exit
