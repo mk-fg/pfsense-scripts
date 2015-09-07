@@ -1,7 +1,11 @@
 pfsense-scripts
 ===============
 
-Misc pfSense helper scripts.
+Misc ad-hoc helper scripts for `pfSense <https://www.pfsense.org/>`_ boxes.
+
+
+.. contents::
+  :backlinks: none
 
 
 Installation
