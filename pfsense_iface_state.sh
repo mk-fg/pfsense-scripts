@@ -1,8 +1,23 @@
 #!/bin/sh
 
-export PFx_CHECK_IFACE=LTE
-export PFx_CHECK_INTERVAL=60
+export PFx_CHECK_IFACE=$1
+export PFx_CHECK_INTERVAL=$2
+[ -z "$PFx_CHECK_INTERVAL" ] && PFx_CHECK_INTERVAL=60
 export PFx_DEBUG=
+
+usage() {
+	bin=$(basename "$0")
+	echo >&2 "Usage: $bin interface_label [check_interval]"
+	echo >&2
+	echo >&2 "Script to detect when interface goes down and restart it."
+	echo >&2 "Restart is done via interface_reconfigure(), which cycles iface state down/up."
+	echo >&2
+	echo >&2 "Note that 'interface_label' must be pfSense interface"
+	echo >&2 " 'Name' (as shown in WebUI), not e.g. em0 or internal id."
+	echo >&2 "Default check_interval: $PFx_CHECK_INTERVAL"
+	exit 1
+}
+[ -z "$1" -o "$1" = -h -o "$1" = --help ] && usage
 
 while true; do
 	sleep 300
