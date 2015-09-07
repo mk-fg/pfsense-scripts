@@ -30,8 +30,7 @@ export PFx_STATE_FILE
 true >"$PFx_STATE_FILE"
 while true; do
 	sleep "$PFx_CHECK_INTERVAL"
-	gw_ifaces=$(cat "$PFx_STATE_FILE")
-	export PFx_IFACE_EXPECT="$gw_ifaces"
+	export PFx_IFACE_EXPECT="$(cat "$PFx_STATE_FILE")"
 	gw_ifaces_new=$(sed '1,/^exit # php-script-start$/d' "$0" | php -q)
 	echo "$gw_ifaces_new" >"$PFx_STATE_FILE"
 done
@@ -46,7 +45,6 @@ require_once('config.inc');
 require_once('util.inc');
 
 require_once('interfaces.inc');
-require_once('filter.inc');
 
 
 # PFx_DEBUG=t PFx_IFACE_EXPECT='em0 em1' script.php

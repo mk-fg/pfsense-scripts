@@ -13,18 +13,18 @@ Installation
 ------------
 
 The Right Way to install these scripts to pfSense machine is to upload them
-through "Filer" package to ``/usr/local/etc/rc.d`` directory, with executable
-bit and retaining ``.sh`` extension.
+through "Filer" package, with executable bit, and setup to run through Filer's
+"Script/Command" option.
 
 "Filer" package can be installed from WebUI's "System - Packages" menu.
 
 After that, individual scripts should be uploaded through "Diagnostics - Filer"
 WebUI form, with the following fields set:
 
-* ``File: /usr/local/etc/<script_name>.sh``
+* ``File: /usr/local/etc/<script_name>``
 * ``Permissions: 0755``
 * ``File Contents: <script_contents>``
-* ``Script/Command: /usr/local/etc/<script_name>.sh <script_args>``
+* ``Script/Command: /usr/local/etc/<script_name> <script_args>``
 * ``Description`` field can be filled with anything you like.
 
 Substitute <scriptname> and <script_contents> above with name/contents for the
