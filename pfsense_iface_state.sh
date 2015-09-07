@@ -1,5 +1,16 @@
-#!/usr/local/bin/php -f
+#!/bin/sh
 
+export PFx_CHECK_IFACE=LTE
+export PFx_CHECK_INTERVAL=60
+export PFx_DEBUG=
+
+while true; do
+	sleep 300
+	sed '1,/^exit # php-script-start$/d' "$0" | php -q
+done
+
+
+exit # php-script-start
 <?php
 
 require_once('globals.inc');
@@ -11,7 +22,7 @@ require_once('interfaces.inc');
 require_once('filter.inc');
 
 
-// PFx_DEBUG=t PFx_CHECK_IFACE=WAN php -f pfsense_iface_state.php
+# PFx_DEBUG=t PFx_CHECK_IFACE=WAN script.php
 $pfx_env_if_to_check = 'PFx_CHECK_IFACE';
 $pfx_env_debug = 'PFx_DEBUG';
 
