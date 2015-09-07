@@ -1,9 +1,12 @@
 #!/bin/sh
 
-export PFx_CHECK_IFACE=$1
-export PFx_CHECK_INTERVAL=$2
-[ -z "$PFx_CHECK_INTERVAL" ] && PFx_CHECK_INTERVAL=60
-export PFx_DEBUG=
+# PFx_CHECK_IFACE must be pfSense interface
+#  'Name' (as shown in WebUI), NOT e.g. em0 or internal id.
+
+PFx_CHECK_IFACE=$1
+PFx_CHECK_INTERVAL=${2:-60}
+
+####################
 
 usage() {
 	bin=$(basename "$0")
@@ -13,14 +16,25 @@ usage() {
 	echo >&2 "Restart is done via interface_reconfigure(), which cycles iface state down/up."
 	echo >&2
 	echo >&2 "Note that 'interface_label' must be pfSense interface"
-	echo >&2 " 'Name' (as shown in WebUI), not e.g. em0 or internal id."
-	echo >&2 "Default check_interval: $PFx_CHECK_INTERVAL"
+	echo >&2 " 'Name' (as shown in WebUI), NOT e.g. em0 or internal id."
+	echo >&2 "Default check_interval: 60"
 	exit 1
 }
-[ -z "$1" -o "$1" = -h -o "$1" = --help ] && usage
+[ -z "$PFx_CHECK_IFACE" -o "$1" = -h -o "$1" = --help ] && usage
+
+PFx_NOBG=t
+[ -z "$PFx_NOBG" ] && {
+	export PFx_NOBG=t
+	nohup "$0" "$@" >/dev/null &
+	exit
+}
+
+export PFx_CHECK_IFACE
+export PFx_CHECK_INTERVAL
 
 while true; do
-	sleep 300
+	touch /tmp/.run_check."$(basename "$0")"
+	sleep "$PFx_CHECK_INTERVAL"
 	sed '1,/^exit # php-script-start$/d' "$0" | php -q
 done
 
