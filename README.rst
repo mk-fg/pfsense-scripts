@@ -61,8 +61,28 @@ Example Filer's "Script/Command" setting (for WAN interface)::
 
   /usr/local/etc/iface_check_restart.sh WAN
 
-Runs an endless loop, checking specified interface state every N seconds and
+Runs in an endless loop, checking specified interface state every N seconds and
 restarting it if check fails.
 
 Restart is done via ``interface_reconfigure($iface)`` from php, which cycles
 iface state down/up.
+
+gateway_change_conn_reset.sh
+````````````````````````````
+
+Script to detect when default gateway interface changes and forcefully kill all
+connections still hanging throu old gateway interface::
+
+  Usage: gateway_change_conn_reset.sh [check_interval]
+
+Command-line arguments:
+
+* check_interval (optional): interval gateway checks, in seconds.
+
+  Default: 60
+
+Runs in an endless loop, getting list of interfaces (os-level, e.g. em0) for
+gateways marked as "defaultgw" and dumping list of these to a file in /tmp
+(configurable in script via PFx_STATE_FILE), checking old contents of it against
+this list and running ``/etc/rc.kill_states <iface>`` for interfaces that are
+not longer used for default gw.
