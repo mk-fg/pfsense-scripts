@@ -6,9 +6,12 @@ require_once('globals.inc');
 require_once('functions.inc');
 require_once('config.inc');
 require_once('util.inc');
+
 require_once('interfaces.inc');
+require_once('filter.inc');
 
 
+// PFx_DEBUG=t PFx_CHECK_IFACE=WAN php -f pfsense_iface_state.php
 $pfx_env_if_to_check = 'PFx_CHECK_IFACE';
 $pfx_env_debug = 'PFx_DEBUG';
 
@@ -21,7 +24,7 @@ function echo_err($stuff) {
 	fwrite($echo_err_stream, "$stuff\n"); }
 function echo_debug($stuff) {
 	global $pfx_debug;
-	if ($pfx_debug) echo_err($stuff); }
+	if ($pfx_debug) echo_err(is_string($stuff) ? $stuff : implode(' :: ', $stuff)); }
 
 
 function pfx_main() {
@@ -37,9 +40,11 @@ function pfx_main() {
 		$if_info = get_interface_info($if);
 		$if_addr = get_interface_ip($if);
 		$status = ($if_info['status'] == 'up' || $if_info['status'] == 'associated') && $if_addr ? 'check-up' : 'check-down';
-		echo_debug(implode(' :: ', array(
-			'iface_state_check', $if, $if_label, $status, $if_addr, $if_info['status'] )));
+		echo_debug(array('iface_state_check', $if, $if_label, $status, $if_addr, $if_info['status']));
 
-		if ($status !== 'check-up') interface_reconfigure($if); } }
+		if ($status !== 'check-up') {
+			echo_debug(array('iface_restart', $if));
+			interface_reconfigure($if, true); // reloadall=true
+			filter_configure(); } } }
 
 pfx_main();
