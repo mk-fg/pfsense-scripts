@@ -78,8 +78,7 @@ function pfx_main() {
 		if ($if_label !== $if_to_check) continue;
 
 		$if_info = get_interface_info($if);
-		$if_addr = get_interface_ip($if);
-		$status = ($if_info['status'] == 'up' || $if_info['status'] == 'associated') && $if_addr ? 'check-up' : 'check-down';
+		$status = ($if_info['status'] == 'up' || $if_info['status'] == 'associated') && $if_info['ipaddr'] ? 'check-up' : 'check-down';
 		echo_debug(array('iface_state_check', $if, $if_label, $status, $if_addr, $if_info['status']));
 
 		if ($status !== 'check-up') {
