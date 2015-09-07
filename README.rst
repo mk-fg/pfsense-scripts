@@ -33,12 +33,12 @@ copying script contents, usually at the very top.
 Scripts
 -------
 
-pfsense_iface_state.sh
+iface_check_restart.sh
 ``````````````````````
 
 Script to detect when interface goes down and restart it::
 
-  Usage: pfsense_iface_state.sh interface_label [check_interval]
+  Usage: iface_check_restart.sh interface_label [check_interval]
 
 Command-line arguments:
 
@@ -53,7 +53,7 @@ Command-line arguments:
 
 Example Filer's "Script/Command" setting (for WAN interface)::
 
-  /usr/local/etc/pfsense_iface_state.sh WAN
+  /usr/local/etc/iface_check_restart.sh WAN
 
 Runs an endless loop, checking specified interface state every N seconds and
 restarting it if check fails.
