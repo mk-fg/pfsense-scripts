@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PFx_CHECK_INTERVAL=${2:-60}
+PFx_CHECK_INTERVAL=${1:-60}
 PFx_STATE_FILE=/tmp/.run_check."$(basename "$0")"
 
 ####################
@@ -47,6 +47,7 @@ require_once('util.inc');
 
 require_once('interfaces.inc');
 require_once('filter.inc');
+
 
 # PFx_DEBUG=t PFx_IFACE_EXPECT='em0 em1' script.php
 $pfx_env_iface_expect = 'PFx_IFACE_EXPECT';
