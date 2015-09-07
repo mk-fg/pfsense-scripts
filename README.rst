@@ -29,9 +29,15 @@ command line (see script descriptions below for these).
 Scripts that are configurable can also have values that can be changed when
 copying script contents, usually at the very top.
 
+Any scripts installed that way will be stored in the pfSense config, and can be
+backed-up/restored along with all the other pfSense configuration parameters
+(e.g. through "Diagnostics - Backup/restore" in WebUI).
+
 
 Scripts
 -------
+
+Install these via "Filer" package, as described in the "Installation" section.
 
 iface_check_restart.sh
 ``````````````````````
